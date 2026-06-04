@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pratik Patil — DevOps · Platform · MLOps Engineer</title>
+  <meta name="description" content="Senior DevOps and Platform Engineer with 7+ years building cloud infrastructure, AI/ML pipelines, Kubernetes platforms, and developer tooling on AWS and GCP." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-logo">pratik.dev</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#certifications">Certs</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-container">
+      <div class="hero-content">
+        <p class="hero-greeting">Hi, I'm</p>
+        <h1 class="hero-name">Pratik Patil</h1>
+        <div class="hero-title-wrap">
+          <span class="hero-title-static">I'm a </span>
+          <span class="hero-typed" id="typed-text"></span><span class="cursor">|</span>
+        </div>
+        <p class="hero-desc">
+          Seven years building cloud infrastructure, CI/CD pipelines, and Kubernetes platforms
+          that engineering teams rely on every day. Currently focused on AI/ML infrastructure —
+          helping companies run machine learning workloads reliably and without surprise cloud bills.
+        </p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="https://github.com/barry-patil" target="_blank" rel="noopener" class="btn btn-outline">GitHub</a>
+          <a href="#contact" class="btn btn-outline">Contact Me</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-avatar">
+          <span>PP</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About / Stats -->
+  <section class="about" id="about">
+    <div class="container">
+      <h2 class="section-heading">About Me</h2>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num">7+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">14</div>
+          <div class="stat-label">Projects Built</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Certifications</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Cloud Platforms</div>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <p>
+          I'm a Senior DevOps and Platform Engineer based in Pune, India, with seven years of experience
+          building the infrastructure layer that keeps software running reliably. I've worked across
+          product-based teams and service delivery — from early-stage automation at Maverick Inc to
+          running production Kubernetes clusters for 50+ microservices at Kaleyra (Tata Communications),
+          and now leading DevOps at Cognam Technologies.
+        </p>
+        <p>
+          My core work spans CI/CD automation, Kubernetes at scale, infrastructure as code with Terraform,
+          and cloud cost optimisation on AWS and GCP. Over the past year I've shifted a significant portion
+          of my focus to AI/ML infrastructure — building platforms that let data science teams deploy models
+          without needing to understand Kubernetes, setting up cost visibility for GPU workloads, and wiring
+          security testing into AI pipelines.
+        </p>
+        <p>
+          I'm open to Senior DevOps, Platform Engineer, MLOps, and AI infrastructure roles globally.
+          If your team is integrating AI into its workflows and needs someone who can build the infrastructure
+          around it properly, that's exactly the problem I enjoy working on.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <h2 class="section-heading">Projects</h2>
+      <p class="section-sub">All projects are on GitHub with real code. Filter by category below.</p>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="ai-ml">AI / ML</button>
+        <button class="filter-btn" data-filter="security">Security</button>
+        <button class="filter-btn" data-filter="kubernetes">Kubernetes</button>
+        <button class="filter-btn" data-filter="cicd">CI/CD</button>
+        <button class="filter-btn" data-filter="cloud">Cloud</button>
+      </div>
+
+      <div class="projects-grid" id="projects-grid">
+
+        <div class="project-card" data-category="ai-ml">
+          <img src="images/ai-finops-platform.svg" alt="AI FinOps architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Kafka</span><span>Python</span><span>Grafana</span><span>EKS</span></div>
+            <h3>AI FinOps Platform</h3>
+            <p>Real-time GPU utilisation and AI API spend monitoring. Streams DCGM metrics and AWS Cost Explorer data through a Kafka cluster into Grafana dashboards. Alerts when a GPU sits idle or daily spend crosses a threshold.</p>
+            <a href="https://github.com/barry-patil/ai-finops-platform" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="ai-ml security">
+          <img src="images/agentic-ai-security-testing.svg" alt="Agentic AI Security architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Python</span><span>FastAPI</span><span>ECS</span><span>OWASP</span></div>
+            <h3>Agentic AI Security Testing</h3>
+            <p>Automated security scanner for LLM applications. Tests for prompt injection, system prompt leakage, and excessive agency against the OWASP Top 10 for LLMs 2025. Can block a PR merge on critical findings.</p>
+            <a href="https://github.com/barry-patil/agentic-ai-security-testing" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="ai-ml">
+          <img src="images/ai-ml-governance.svg" alt="AI/ML Governance architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>OPA</span><span>Sentinel</span><span>Terraform</span><span>EKS</span></div>
+            <h3>AI/ML Governance</h3>
+            <p>Policy-as-code for ML workloads. Sentinel blocks unauthorised GPU instances at Terraform plan time. OPA Gatekeeper admission webhooks enforce model version tracking, team ownership, and EU AI Act risk classification on every deployment.</p>
+            <a href="https://github.com/barry-patil/ai-ml-governance" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="ai-ml kubernetes">
+          <img src="images/ai-ml-developer-platform.svg" alt="AI/ML Developer Platform architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Backstage</span><span>MLflow</span><span>ArgoCD</span><span>EKS</span></div>
+            <h3>AI/ML Developer Platform</h3>
+            <p>Self-service ML platform built on Backstage. One form submission creates a GitHub repo, MLflow experiment, ArgoCD deployment, and cost tracking — automatically. GPU cost tracker shows per-team spend without AWS console access.</p>
+            <a href="https://github.com/barry-patil/ai-ml-developer-platform" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="security kubernetes">
+          <img src="images/zero-trust-kubernetes.svg" alt="Zero Trust Kubernetes architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Cilium</span><span>SPIFFE</span><span>WireGuard</span><span>Terraform</span></div>
+            <h3>Zero Trust Kubernetes</h3>
+            <p>Default-deny Kubernetes with Cilium eBPF enforcement, SPIFFE/SPIRE workload identity, and WireGuard node encryption. Three security zones with L7 HTTP policy on every cross-zone call. NIST SP 800-207 aligned.</p>
+            <a href="https://github.com/barry-patil/zero-trust-kubernetes" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="security">
+          <img src="images/secrets-management-vault.svg" alt="Vault Secrets Management architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Vault</span><span>EKS</span><span>KMS</span><span>Terraform</span></div>
+            <h3>Secrets Management with Vault</h3>
+            <p>HashiCorp Vault HA cluster on EKS with Raft storage and KMS auto-unseal. Dynamic PostgreSQL credentials, AWS IAM users, PKI certificate authority. Vault Secrets Operator syncs secrets into Kubernetes natively.</p>
+            <a href="https://github.com/barry-patil/secrets-management-vault" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="security cicd">
+          <img src="images/devsecops-pipeline.svg" alt="DevSecOps Pipeline architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>GitHub Actions</span><span>Trivy</span><span>SonarQube</span><span>ZAP</span></div>
+            <h3>DevSecOps Pipeline</h3>
+            <p>Security checks at every stage: SAST, dependency scanning, SonarQube quality gate, Trivy container scan blocking on CRITICAL CVEs, and OWASP ZAP DAST on pull requests. Full EKS deployment with rollout validation.</p>
+            <a href="https://github.com/barry-patil/devsecops-pipeline" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="kubernetes">
+          <img src="images/eks-production-setup.svg" alt="EKS Production Setup architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>EKS</span><span>Terraform</span><span>Autoscaling</span><span>IRSA</span></div>
+            <h3>EKS Production Setup</h3>
+            <p>Opinionated production EKS cluster. Separate system and application node groups, IRSA for per-pod IAM, cluster autoscaler with least-waste expander, private subnets with NAT per AZ. Fully Terraform managed.</p>
+            <a href="https://github.com/barry-patil/eks-production-setup" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="kubernetes cicd">
+          <img src="images/multi-cloud-gitops.svg" alt="Multi-Cloud GitOps architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>ArgoCD</span><span>Flux</span><span>SageMaker</span><span>AWS/GCP</span></div>
+            <h3>Multi-Cloud GitOps</h3>
+            <p>ArgoCD ApplicationSets deploy services to EKS and GKE simultaneously from a single Git repo. AIOps layer feeds CloudWatch metrics into SageMaker anomaly detection — cut mean time to resolution by 60%.</p>
+            <a href="https://github.com/barry-patil/multi-cloud-gitops" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="kubernetes">
+          <img src="images/kubernetes-observability-stack.svg" alt="Kubernetes Observability Stack architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Prometheus</span><span>Grafana</span><span>Elasticsearch</span><span>Fluentd</span></div>
+            <h3>Kubernetes Observability Stack</h3>
+            <p>Metrics and logs in one place. Prometheus and Grafana for metrics, Fluentd DaemonSet shipping to Elasticsearch and Kibana for logs. Correlate a CPU spike with log events from the same moment, in one tool.</p>
+            <a href="https://github.com/barry-patil/kubernetes-observability-stack" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="kubernetes">
+          <img src="images/observability-stack.svg" alt="Observability Stack architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Prometheus</span><span>Alertmanager</span><span>PagerDuty</span><span>CloudWatch</span></div>
+            <h3>Observability &amp; Alerting Stack</h3>
+            <p>Alert rules with runbook links in every annotation. Alertmanager routes warnings to Slack, critical alerts to PagerDuty. Suppresses pod alerts when the real issue is a failing node — no alert storms at 2 AM.</p>
+            <a href="https://github.com/barry-patil/observability-stack" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="cloud">
+          <img src="images/aws-cost-optimizer.svg" alt="AWS Cost Optimizer architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Lambda</span><span>EventBridge</span><span>Terraform</span><span>Slack</span></div>
+            <h3>AWS Cost Optimizer</h3>
+            <p>Stops tagged EC2 instances at 8 PM IST weekdays, restarts them at 9 AM. Unused resource detector surfaces idle instances and unattached EBS volumes. Slack bot gives the ops team cost controls without AWS console access.</p>
+            <a href="https://github.com/barry-patil/aws-cost-optimizer" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="cicd">
+          <img src="images/cicd-pipeline-comparison.svg" alt="CI/CD Pipeline Comparison architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Jenkins</span><span>GitHub Actions</span><span>SonarQube</span><span>AWS</span></div>
+            <h3>CI/CD Pipeline Comparison</h3>
+            <p>Jenkins vs GitHub Actions running in parallel against the same AWS infrastructure. Same quality gates, different tools. Honest comparison on build time, maintenance overhead, and developer experience with real numbers.</p>
+            <a href="https://github.com/barry-patil/cicd-pipeline-comparison" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="cloud">
+          <img src="images/serverless-aws-app.svg" alt="Serverless AWS Application architecture" class="card-diagram"/>
+          <div class="card-body">
+            <div class="card-tags"><span>Lambda</span><span>DynamoDB</span><span>Cognito</span><span>Terraform</span></div>
+            <h3>Serverless AWS Application</h3>
+            <p>3-tier serverless app with Lambda, API Gateway, DynamoDB, and Cognito auth. No servers to manage. Replaced a VM-hosted internal tool at Tractebel — costs near zero when idle, scales automatically, zero incidents since deployment.</p>
+            <a href="https://github.com/barry-patil/serverless-aws-app" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="skills" id="skills">
+    <div class="container">
+      <h2 class="section-heading">Skills</h2>
+
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h3>Cloud Platforms</h3>
+          <div class="skill-pills">
+            <span>AWS</span><span>Google Cloud</span><span>EC2</span><span>EKS</span>
+            <span>Lambda</span><span>RDS</span><span>S3</span><span>CloudWatch</span>
+            <span>IAM</span><span>VPC</span><span>ECR</span><span>SageMaker</span>
+            <span>Bedrock</span><span>GKE</span><span>Cloud Run</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3>Containers &amp; Orchestration</h3>
+          <div class="skill-pills">
+            <span>Kubernetes</span><span>Docker</span><span>Helm</span>
+            <span>Amazon EKS</span><span>GKE</span><span>Istio</span>
+            <span>Cilium</span><span>SPIFFE / SPIRE</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3>CI/CD &amp; GitOps</h3>
+          <div class="skill-pills">
+            <span>GitHub Actions</span><span>Jenkins</span><span>ArgoCD</span>
+            <span>Flux</span><span>Maven</span><span>Helm</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3>Infrastructure as Code</h3>
+          <div class="skill-pills">
+            <span>Terraform</span><span>CloudFormation</span>
+            <span>HashiCorp Vault</span><span>Sentinel</span><span>OPA Gatekeeper</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3>Monitoring &amp; Observability</h3>
+          <div class="skill-pills">
+            <span>Prometheus</span><span>Grafana</span><span>Alertmanager</span>
+            <span>DataDog</span><span>CloudWatch</span><span>Elasticsearch</span>
+            <span>Kibana</span><span>Fluentd</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3>Security</h3>
+          <div class="skill-pills">
+            <span>RBAC</span><span>IAM Policies</span><span>SonarQube</span>
+            <span>Trivy</span><span>Bandit</span><span>OWASP ZAP</span>
+            <span>Secrets Management</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3>AI / ML Infrastructure</h3>
+          <div class="skill-pills">
+            <span>MLflow</span><span>Backstage</span><span>SageMaker</span>
+            <span>Kafka</span><span>GPU Cost Monitoring</span><span>LLM Security</span>
+            <span>OPA for AI Governance</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3>Scripting &amp; Tools</h3>
+          <div class="skill-pills">
+            <span>Python</span><span>Shell</span><span>Git</span>
+            <span>Bitbucket</span><span>JIRA</span><span>ServiceNow</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certifications -->
+  <section class="certifications" id="certifications">
+    <div class="container">
+      <h2 class="section-heading">Certifications</h2>
+      <div class="certs-grid">
+
+        <div class="cert-card">
+          <a href="https://www.credly.com/badges" target="_blank" rel="noopener" class="cert-badge-img-wrap">
+            <img src="https://images.credly.com/size/340x340/images/0e284c3f-5164-4b21-8660-0d84737941bc/image.png"
+                 alt="AWS Solutions Architect Associate badge"
+                 class="cert-badge-img" loading="lazy"
+                 onerror="this.style.display='none';this.parentElement.classList.add('cert-badge-fallback');this.parentElement.innerHTML='<span>AWS</span>';" />
+          </a>
+          <div class="cert-info">
+            <h3>AWS Solutions Architect</h3>
+            <p>Associate · Amazon Web Services</p>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <a href="https://www.credly.com/badges" target="_blank" rel="noopener" class="cert-badge-img-wrap">
+            <img src="https://images.credly.com/size/340x340/images/f0d3fbb9-bfa7-4017-9989-7bde8eaf42b1/image.png"
+                 alt="AWS SysOps Administrator Associate badge"
+                 class="cert-badge-img" loading="lazy"
+                 onerror="this.style.display='none';this.parentElement.classList.add('cert-badge-fallback');this.parentElement.innerHTML='<span>AWS</span>';" />
+          </a>
+          <div class="cert-info">
+            <h3>AWS SysOps Administrator</h3>
+            <p>Associate · Amazon Web Services</p>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <a href="https://www.credly.com/badges" target="_blank" rel="noopener" class="cert-badge-img-wrap">
+            <img src="https://images.credly.com/size/340x340/images/99289602-861e-4929-8277-773e63a2fa6f/image.png"
+                 alt="HashiCorp Terraform Associate badge"
+                 class="cert-badge-img" loading="lazy"
+                 onerror="this.style.display='none';this.parentElement.classList.add('cert-badge-fallback');this.parentElement.innerHTML='<span>TF</span>';" />
+          </a>
+          <div class="cert-info">
+            <h3>Terraform Associate</h3>
+            <p>HashiCorp Certified</p>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-badge-img-wrap cert-badge-edu">
+            <span>IIIT</span>
+          </div>
+          <div class="cert-info">
+            <h3>Advanced DevOps Diploma</h3>
+            <p>IIIT Bangalore</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="education-row">
+        <span class="edu-degree">B.E. Engineering</span>
+        <span class="edu-school">SGBAU, Amravati, Maharashtra, India</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <h2 class="section-heading">Get In Touch</h2>
+      <p class="contact-sub">
+        Open to Senior DevOps, Platform Engineer, MLOps, and AI infrastructure roles globally.
+        If you're building something interesting, let's talk.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:pratikpatilaws@gmail.com" class="contact-item">
+          <span class="contact-icon">✉</span>
+          <span>pratikpatilaws@gmail.com</span>
+        </a>
+        <a href="https://linkedin.com/in/pratik-patil-039836222" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-icon">in</span>
+          <span>LinkedIn</span>
+        </a>
+        <a href="https://github.com/barry-patil" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-icon">gh</span>
+          <span>GitHub</span>
+        </a>
+        <a href="https://medium.com/@pratikpatilaws" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-icon">M</span>
+          <span>Medium</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Pratik Patil &nbsp;·&nbsp; Pune, India &nbsp;·&nbsp; Open to global opportunities</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

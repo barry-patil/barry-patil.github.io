@@ -1,0 +1,160 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CI/CD Pipeline Comparison">
+    <mxGraphModel dx="1200" dy="800" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+
+        <mxCell id="2" value="CI/CD Pipeline Comparison — GitHub Actions vs Jenkins vs GitLab CI" style="text;html=1;align=center;fontSize=16;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="250" y="20" width="1100" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Shared stages label -->
+        <mxCell id="3" value="Same pipeline stages — different tooling" style="text;html=1;align=center;fontSize=12;fontStyle=2;fillColor=none;strokeColor=none;fontColor=#666;" vertex="1" parent="1">
+          <mxGeometry x="500" y="55" width="600" height="25" as="geometry"/>
+        </mxCell>
+
+        <!-- GitHub Actions column -->
+        <mxCell id="10" value="GitHub Actions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2088FF;fontColor=#ffffff;strokeColor=#1a6fcc;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="420" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="11" value="Trigger: push / PR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4ff;strokeColor=#2088FF;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="180" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="Hosted runners (ubuntu-latest)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4ff;strokeColor=#2088FF;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="255" y="180" width="225" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="13" value="Test" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="260" width="100" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="14" value="SAST + Trivy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="175" y="260" width="120" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="15" value="Build + Push" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="260" width="120" height="45" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="16" value="Deploy (Helm → EKS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="335" width="370" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="17" value="✓ Zero infra to manage   ✓ Native GitHub integration   ✓ Reusable Actions marketplace" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fff0;strokeColor=#82b366;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="60" y="395" width="420" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Jenkins column -->
+        <mxCell id="20" value="Jenkins (self-hosted)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D33833;fontColor=#ffffff;strokeColor=#9a2520;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="100" width="420" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="21" value="Trigger: webhook / poll SCM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fde8e8;strokeColor=#D33833;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="180" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="22" value="Jenkins agents (EC2 spot)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fde8e8;strokeColor=#D33833;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="770" y="180" width="210" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="23" value="Test" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="260" width="100" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="24" value="SAST + Trivy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="675" y="260" width="120" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="25" value="Build + Push" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="260" width="120" height="45" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="26" value="Deploy (Helm → EKS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="335" width="370" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="27" value="✓ Max plugin flexibility   ✓ Complex multi-branch pipelines   ✗ Infra overhead (EC2 + upgrades)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8f8;strokeColor=#D33833;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="560" y="395" width="420" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- GitLab CI column -->
+        <mxCell id="30" value="GitLab CI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FC6D26;fontColor=#ffffff;strokeColor=#c04e10;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="100" width="420" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="31" value="Trigger: push / MR / schedule" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0e8;strokeColor=#FC6D26;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="180" width="210" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="32" value="GitLab Runners (K8s executor)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0e8;strokeColor=#FC6D26;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="180" width="200" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="33" value="Test" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="260" width="100" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="34" value="SAST + Trivy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1175" y="260" width="120" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="35" value="Build + Push" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="260" width="120" height="45" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="36" value="Deploy (Helm → EKS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="335" width="370" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="37" value="✓ Built-in container registry   ✓ K8s executor native   ✓ Merged SCM + CI in one platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff5f0;strokeColor=#FC6D26;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="395" width="420" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Benchmark results -->
+        <mxCell id="40" value="Benchmark Results (same Go microservice, 3 runs avg)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#555;strokeWidth=2;verticalAlign=top;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="480" width="1420" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="41" value="Pipeline Metric" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#232F3E;fontColor=#ffffff;strokeColor=#555;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="520" width="200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="42" value="GitHub Actions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2088FF;fontColor=#ffffff;strokeColor=#1a6fcc;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="520" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="43" value="Jenkins" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D33833;fontColor=#ffffff;strokeColor=#9a2520;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="520" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="44" value="GitLab CI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FC6D26;fontColor=#ffffff;strokeColor=#c04e10;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="520" width="180" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="45" value="Cold start time" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#ccc;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="575" width="200" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="46" value="~22 seconds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4ff;strokeColor=#2088FF;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="300" y="575" width="180" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="47" value="~45 seconds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fde8e8;strokeColor=#D33833;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="500" y="575" width="180" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="48" value="~18 seconds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0e8;strokeColor=#FC6D26;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="575" width="180" height="35" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="49" value="Full pipeline time" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#ccc;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="620" width="200" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="50" value="4m 12s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4ff;strokeColor=#2088FF;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="300" y="620" width="180" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="51" value="6m 05s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fde8e8;strokeColor=#D33833;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="500" y="620" width="180" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="52" value="3m 55s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0e8;strokeColor=#FC6D26;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="620" width="180" height="35" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges between stages -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2088FF;strokeWidth=2;" edge="1" source="13" target="14" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2088FF;strokeWidth=2;" edge="1" source="14" target="15" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#D33833;strokeWidth=2;" edge="1" source="23" target="24" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#D33833;strokeWidth=2;" edge="1" source="24" target="25" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#FC6D26;strokeWidth=2;" edge="1" source="33" target="34" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#FC6D26;strokeWidth=2;" edge="1" source="34" target="35" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
