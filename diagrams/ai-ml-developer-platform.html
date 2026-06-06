@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AI/ML Developer Platform — Architecture</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif}
+.bar{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(0,0,0,.95);border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;backdrop-filter:blur(12px)}
+.bl{display:flex;align-items:center;gap:10px}
+.bt{color:#fff;font-size:14px;font-weight:600}
+.bg{color:#3b82f6;font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);padding:3px 9px;border-radius:4px}
+.bb{color:#3b82f6;font-size:13px;text-decoration:none;border:1px solid rgba(59,130,246,.4);padding:7px 16px;border-radius:6px;transition:.2s}
+.bb:hover{background:#3b82f6;color:#fff}
+.ctrl{position:fixed;bottom:24px;right:24px;z-index:100;display:flex;flex-direction:column;gap:6px}
+.cb{width:36px;height:36px;background:#0d0d0d;border:1px solid #222;border-radius:8px;color:#777;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.cb:hover{background:#141414;border-color:#3b82f6;color:#3b82f6}
+.hint{position:fixed;bottom:28px;left:24px;color:#252525;font-size:11px;z-index:100;line-height:1.9}
+#cv{display:block;width:100vw;height:calc(100vh - 52px);margin-top:52px;cursor:grab}
+#cv:active{cursor:grabbing}
+.fe{stroke-dasharray:8 5;animation:fl 1.8s linear infinite}
+@keyframes fl{to{stroke-dashoffset:-26}}
+.ng{cursor:pointer}
+.ng:hover .nr{filter:drop-shadow(0 0 14px var(--glow,#3b82f6));stroke-width:2.5}
+.ng:hover text{fill:#fff!important}
+.tip{position:fixed;background:#0d0d0d;border:1px solid #2a2a2a;color:#bbb;padding:9px 13px;border-radius:8px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:200;max-width:260px;line-height:1.6;box-shadow:0 8px 32px rgba(0,0,0,.7)}
+.tip.on{opacity:1}
+</style></head><body>
+<div class="bar">
+  <div class="bl"><span class="bt">AI/ML Developer Platform</span><span class="bg">FastAPI · Argo · MLflow · EKS</span></div>
+  <a href="https://barry-patil.github.io/#projects" class="bb">← Portfolio</a>
+</div>
+<div class="ctrl">
+  <button class="cb" id="zi">+</button>
+  <button class="cb" id="zo">−</button>
+  <button class="cb" id="zr" style="font-size:12px">⌖</button>
+</div>
+<div class="hint">Scroll to zoom · Drag to pan · Hover nodes for details</div>
+<div class="tip" id="tp"></div>
+<svg id="cv" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="a-blue"   markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#3b82f6"/></marker>
+  <marker id="a-green"  markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#22c55e"/></marker>
+  <marker id="a-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#f97316"/></marker>
+  <marker id="a-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#a855f7"/></marker>
+  <marker id="a-red"    markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ef4444"/></marker>
+  <marker id="a-cyan"   markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#06b6d4"/></marker>
+  <marker id="a-yellow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eab308"/></marker>
+</defs>
+<g id="dg">
+<path d="M190,166.0 C230.0,166.0 230.0,166.0 270,166.0" fill="none" stroke="#3b82f6" stroke-width="1.5" class="fe" marker-end="url(#a-blue)"/>
+<path d="M420,166.0 C460.0,166.0 460.0,86.0 500,86.0" fill="none" stroke="#06b6d4" stroke-width="1.5" class="fe" marker-end="url(#a-cyan)"/><text x="460.0" y="116.0" text-anchor="middle" fill="#444" font-size="10">queue job</text>
+<path d="M420,166.0 C460.0,166.0 460.0,246.0 500,246.0" fill="none" stroke="#06b6d4" stroke-width="1.5" class="fe" marker-end="url(#a-cyan)"/>
+<path d="M650,86.0 C690.0,86.0 690.0,86.0 730,86.0" fill="none" stroke="#a855f7" stroke-width="1.5" class="fe" marker-end="url(#a-purple)"/><text x="690.0" y="76.0" text-anchor="middle" fill="#444" font-size="10">schedule pods</text>
+<path d="M575.0,112 C575.0,112 575.0,220 575.0,220" fill="none" stroke="#a855f7" stroke-width="1.5" class="fe" marker-end="url(#a-purple)"/><text x="575.0" y="156.0" text-anchor="middle" fill="#444" font-size="10">log runs</text>
+<path d="M650,246.0 C690.0,246.0 690.0,246.0 730,246.0" fill="none" stroke="#22c55e" stroke-width="1.5" class="fe" marker-end="url(#a-green)"/><text x="690.0" y="236.0" text-anchor="middle" fill="#444" font-size="10">promote model</text>
+<path d="M880,86.0 C920.0,86.0 920.0,166.0 960,166.0" fill="none" stroke="#f97316" stroke-width="1.5" class="fe" marker-end="url(#a-orange)"/>
+<path d="M890,246.0 C925.0,246.0 925.0,166.0 960,166.0" fill="none" stroke="#06b6d4" stroke-width="1.5" class="fe" marker-end="url(#a-cyan)"/>
+<g class="ng" data-tip="Self-service portal — data scientists submit training jobs, pick base images, set resource quotas" style="--glow:#3b82f6"><rect class="nr" x="40" y="140" width="150" height="52" rx="8" fill="#0a1628" stroke="#3b82f6" stroke-width="1.5"/><text x="115.0" y="163.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">Developer</text><text x="115.0" y="178.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">Portal</text></g>
+<g class="ng" data-tip="FastAPI gateway — authenticates requests, validates job specs, queues to Argo Workflows" style="--glow:#06b6d4"><rect class="nr" x="270" y="140" width="150" height="52" rx="8" fill="#051520" stroke="#06b6d4" stroke-width="1.5"/><text x="345.0" y="163.75" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="500">Platform API</text><text x="345.0" y="178.75" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="500">(FastAPI)</text></g>
+<g class="ng" data-tip="Argo Workflows — DAG-based training pipelines; each step runs in an isolated K8s pod" style="--glow:#a855f7"><rect class="nr" x="500" y="60" width="150" height="52" rx="8" fill="#150a28" stroke="#a855f7" stroke-width="1.5"/><text x="575.0" y="83.75" text-anchor="middle" fill="#d8b4fe" font-size="12" font-weight="500">Argo</text><text x="575.0" y="98.75" text-anchor="middle" fill="#d8b4fe" font-size="12" font-weight="500">Workflows</text></g>
+<g class="ng" data-tip="MLflow Model Registry — tracks experiment runs, model versions, and promotion to staging/prod" style="--glow:#22c55e"><rect class="nr" x="500" y="220" width="150" height="52" rx="8" fill="#0a1f12" stroke="#22c55e" stroke-width="1.5"/><text x="575.0" y="243.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">MLflow</text><text x="575.0" y="258.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">Registry</text></g>
+<g class="ng" data-tip="EKS GPU node pool — A100/V100 instances, spot + on-demand mix, DCGM monitoring, auto-scaler" style="--glow:#f97316"><rect class="nr" x="730" y="60" width="150" height="52" rx="8" fill="#1f1000" stroke="#f97316" stroke-width="1.5"/><text x="805.0" y="83.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">GPU Node</text><text x="805.0" y="98.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">Pool (EKS)</text></g>
+<g class="ng" data-tip="TorchServe on EKS — model serving with canary rollouts, HPA on GPU utilisation metric" style="--glow:#06b6d4"><rect class="nr" x="730" y="220" width="160" height="52" rx="8" fill="#051520" stroke="#06b6d4" stroke-width="1.5"/><text x="810.0" y="243.75" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="500">Inference</text><text x="810.0" y="258.75" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="500">API (TorchServe)</text></g>
+<g class="ng" data-tip="Grafana — training cost per run, inference latency p95/p99, GPU utilisation, error rates" style="--glow:#22c55e"><rect class="nr" x="960" y="140" width="150" height="52" rx="8" fill="#0a1f12" stroke="#22c55e" stroke-width="1.5"/><text x="1035.0" y="163.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">Monitoring</text><text x="1035.0" y="178.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">(Grafana)</text></g>
+</g>
+</svg>
+<script>
+const sv=document.getElementById('cv'),g=document.getElementById('dg'),tp=document.getElementById('tp');
+let sc=1,tx=0,ty=0,dr=false,lx=0,ly=0;
+function aT(){g.setAttribute('transform',`translate(${tx},${ty}) scale(${sc})`);}
+sv.addEventListener('wheel',e=>{e.preventDefault();const r=sv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top,d=e.deltaY>0?.88:1.12,ns=Math.max(.1,Math.min(6,sc*d));tx=mx-(mx-tx)*(ns/sc);ty=my-(my-ty)*(ns/sc);sc=ns;aT();},{passive:false});
+sv.addEventListener('mousedown',e=>{if(!e.target.closest('.ng')){dr=true;lx=e.clientX;ly=e.clientY;}});
+window.addEventListener('mousemove',e=>{if(!dr)return;tx+=e.clientX-lx;ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;aT();});
+window.addEventListener('mouseup',()=>dr=false);
+document.getElementById('zi').onclick=()=>{sc=Math.min(6,sc*1.2);aT();};
+document.getElementById('zo').onclick=()=>{sc=Math.max(.1,sc/1.2);aT();};
+document.getElementById('zr').onclick=()=>{sc=1;tx=0;ty=0;aT();};
+window.addEventListener('load',()=>{const b=g.getBBox(),sw=sv.clientWidth,sh=sv.clientHeight;sc=Math.min(sw/(b.width+160),sh/(b.height+160),1.5);tx=(sw-b.width*sc)/2-b.x*sc;ty=(sh-b.height*sc)/2-b.y*sc;aT();});
+document.querySelectorAll('.ng[data-tip]').forEach(n=>{n.addEventListener('mouseenter',()=>{tp.textContent=n.dataset.tip;tp.classList.add('on');});n.addEventListener('mousemove',e=>{tp.style.left=(e.clientX+16)+'px';tp.style.top=(e.clientY-8)+'px';});n.addEventListener('mouseleave',()=>tp.classList.remove('on'));});
+</script></body></html>
