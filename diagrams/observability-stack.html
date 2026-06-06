@@ -1,79 +1,99 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Observability Stack — Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif}
-.bar{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(0,0,0,.95);border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;backdrop-filter:blur(12px)}
-.bl{display:flex;align-items:center;gap:10px}
-.bt{color:#fff;font-size:14px;font-weight:600}
-.bg{color:#3b82f6;font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);padding:3px 9px;border-radius:4px}
-.bb{color:#3b82f6;font-size:13px;text-decoration:none;border:1px solid rgba(59,130,246,.4);padding:7px 16px;border-radius:6px;transition:.2s}
-.bb:hover{background:#3b82f6;color:#fff}
-.ctrl{position:fixed;bottom:24px;right:24px;z-index:100;display:flex;flex-direction:column;gap:6px}
-.cb{width:36px;height:36px;background:#0d0d0d;border:1px solid #222;border-radius:8px;color:#777;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
-.cb:hover{background:#141414;border-color:#3b82f6;color:#3b82f6}
-.hint{position:fixed;bottom:28px;left:24px;color:#252525;font-size:11px;z-index:100;line-height:1.9}
-#cv{display:block;width:100vw;height:calc(100vh - 52px);margin-top:52px;cursor:grab}
-#cv:active{cursor:grabbing}
-.fe{stroke-dasharray:8 5;animation:fl 1.8s linear infinite}
-@keyframes fl{to{stroke-dashoffset:-26}}
-.ng{cursor:pointer}
-.ng:hover .nr{filter:drop-shadow(0 0 14px var(--glow,#3b82f6));stroke-width:2.5}
-.ng:hover text{fill:#fff!important}
-.tip{position:fixed;background:#0d0d0d;border:1px solid #2a2a2a;color:#bbb;padding:9px 13px;border-radius:8px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:200;max-width:260px;line-height:1.6;box-shadow:0 8px 32px rgba(0,0,0,.7)}
-.tip.on{opacity:1}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f1f5f9;font-family:Inter,system-ui,sans-serif;min-height:100vh;}
+.hdr{background:#fff;border-bottom:1px solid #e2e8f0;padding:28px 44px 24px;position:relative;}
+.bc{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:10px;}
+.htitle{font-size:24px;font-weight:700;color:#0f172a;margin-bottom:8px;}
+.hdesc{font-size:13px;color:#64748b;max-width:580px;line-height:1.65;}
+.chips{position:absolute;top:28px;right:44px;display:flex;flex-direction:column;gap:6px;}
+.chip{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 14px;}
+.chipk{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin-bottom:3px;}
+.chipv{font-size:12px;font-weight:600;color:#0f172a;}
+.bbtn{position:absolute;bottom:20px;right:44px;font-size:12px;color:#3b82f6;text-decoration:none;border:1px solid #bfdbfe;padding:5px 12px;border-radius:6px;transition:.2s;}
+.bbtn:hover{background:#3b82f6;color:#fff;border-color:#3b82f6;}
+.cwrap{margin:20px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;cursor:grab;user-select:none;}
+.cwrap:active{cursor:grabbing;}
+.cinner{position:relative;transform-origin:0 0;}
+.lane{position:absolute;top:0;bottom:0;border-right:1px solid #f1f5f9;pointer-events:none;}
+.lhdr{position:absolute;top:16px;left:14px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#cbd5e1;white-space:nowrap;}
+.node{position:absolute;height:70px;background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s,box-shadow .2s,opacity .25s;}
+.node:hover,.node.focused{border-color:#3b82f6;box-shadow:0 0 0 3px #3b82f612;z-index:10;}
+.node.pinned{border-color:#2563eb;box-shadow:0 0 0 4px #2563eb1a;z-index:11;}
+.node.dimmed{opacity:.15;pointer-events:none;}
+.ni{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;letter-spacing:-.02em;}
+.nc{flex:1;min-width:0;}
+.nname{font-size:12px;font-weight:600;color:#0f172a;line-height:1.3;}
+.nsub{font-size:10px;color:#94a3b8;margin-top:2px;line-height:1.4;}
+.nbadge{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;border-top:1px solid #f1f5f9;padding-top:4px;margin-top:4px;}
+.esvg{position:absolute;inset:0;pointer-events:none;overflow:visible;}
+.ea{animation:fl 1.6s linear infinite;}
+@keyframes fl{to{stroke-dashoffset:-18;}}
+.elbl{font-size:9px;fill:#94a3b8;font-family:Inter,sans-serif;}
+path.dim{opacity:.08!important;}
+.legend{position:fixed;bottom:24px;right:24px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;z-index:200;box-shadow:0 4px 20px #0000000d;}
+.ltit{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:10px;}
+.lrow{display:flex;align-items:center;gap:8px;font-size:11px;color:#374151;padding:3px 0;cursor:pointer;}
+.lrow input{cursor:pointer;accent-color:#3b82f6;width:13px;height:13px;}
+.zctrl{position:fixed;bottom:24px;left:24px;display:flex;flex-direction:column;gap:5px;z-index:200;}
+.zb{width:32px;height:32px;background:#fff;border:1px solid #e2e8f0;border-radius:7px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0000000a;transition:.2s;}
+.zb:hover{border-color:#3b82f6;color:#3b82f6;}
+.hint{position:fixed;bottom:66px;left:24px;font-size:10px;color:#cbd5e1;z-index:200;line-height:1.8;}
 </style></head><body>
-<div class="bar">
-  <div class="bl"><span class="bt">Observability Stack</span><span class="bg">Prometheus · ELK · OpenTelemetry · Grafana</span></div>
-  <a href="https://barry-patil.github.io/#projects" class="bb">← Portfolio</a>
+<div class="hdr"><div class="bc">CASE STUDY · DEVOPS & INFRASTRUCTURE</div><h1 class="htitle">Observability Stack</h1><p class="hdesc">Three-pillar observability: Prometheus for metrics (hot/warm tiers), ELK stack for logs, OpenTelemetry + Jaeger for traces. Grafana correlates all three via exemplars and traceID field injection.</p><div class="chips"><div class="chip"><div class="chipk">METRICS</div><div class="chipv">Prometheus · node_exporter</div></div><div class="chip"><div class="chipk">LOGS</div><div class="chipv">Fluentd · Elasticsearch</div></div><div class="chip"><div class="chipk">TRACES</div><div class="chipv">OTel SDK · Jaeger</div></div><div class="chip"><div class="chipk">CORRELATION</div><div class="chipv">Grafana · Alertmanager</div></div></div><a href="https://barry-patil.github.io/#projects" class="bbtn">← Portfolio</a></div>
+<div class="cwrap" id="cw"><div class="cinner" id="ci" style="width:770px;height:482px;"><div class="lane" style="left:0px;width:200px;height:482px;"><span class="lhdr">01 · COLLECTORS</span></div><div class="lane" style="left:200px;width:185px;height:482px;"><span class="lhdr">02 · STORAGE</span></div><div class="lane" style="left:385px;width:200px;height:482px;"><span class="lhdr">03 · VISUALISE</span></div><div class="lane" style="left:585px;width:185px;height:482px;"><span class="lhdr">04 · ALERTING</span></div><div class="node" id="n-node" style="left:12px;top:162px;width:160px;" data-id="node"><div class="ni" style="background:#f9731618;color:#f97316;">📊</div><div class="nc"><div class="nname">node_exporter + cAdvisor</div><div class="nsub">Host + container metrics</div></div></div>
+<div class="node" id="n-fluentd" style="left:12px;top:262px;width:160px;" data-id="fluentd"><div class="ni" style="background:#16a34a18;color:#16a34a;">Fd</div><div class="nc"><div class="nname">Fluentd DaemonSet</div><div class="nsub">Collect + enrich pod logs</div></div></div>
+<div class="node" id="n-otel" style="left:12px;top:362px;width:160px;" data-id="otel"><div class="ni" style="background:#06b6d418;color:#06b6d4;">OT</div><div class="nc"><div class="nname">OTel SDK</div><div class="nsub">Auto-instrument apps</div></div></div>
+<div class="node" id="n-prom" style="left:212px;top:162px;width:160px;" data-id="prom"><div class="ni" style="background:#f9731618;color:#f97316;">P</div><div class="nc"><div class="nname">Prometheus TSDB</div><div class="nsub">15d local · remote-write Thanos</div><div class="nbadge">METRICS</div></div></div>
+<div class="node" id="n-es" style="left:212px;top:262px;width:160px;" data-id="es"><div class="ni" style="background:#16a34a18;color:#16a34a;">ES</div><div class="nc"><div class="nname">Elasticsearch</div><div class="nsub">7d hot · 30d warm · 90d cold S3</div><div class="nbadge">LOGS</div></div></div>
+<div class="node" id="n-jaeger" style="left:212px;top:362px;width:160px;" data-id="jaeger"><div class="ni" style="background:#06b6d418;color:#06b6d4;">Jg</div><div class="nc"><div class="nname">Jaeger</div><div class="nsub">Elasticsearch backend for prod</div><div class="nbadge">TRACES</div></div></div>
+<div class="node" id="n-grafana" style="left:397px;top:262px;width:160px;" data-id="grafana"><div class="ni" style="background:#f9731618;color:#f97316;">G</div><div class="nc"><div class="nname">Grafana Correlation</div><div class="nsub">Exemplars · traceID linking</div><div class="nbadge">UNIFIED</div></div></div>
+<div class="node" id="n-am" style="left:597px;top:262px;width:160px;" data-id="am"><div class="ni" style="background:#ef444418;color:#ef4444;">🔔</div><div class="nc"><div class="nname">Alertmanager + Runbooks</div><div class="nsub">Annotated runbook links</div><div class="nbadge">ALERTING</div></div></div><svg class="esvg" width="770" height="482"><defs><marker id="auser" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2563eb"/></marker><marker id="adata" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1e293b"/></marker><marker id="aasync" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ea580c"/></marker><marker id="atelemetry" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#16a34a"/></marker><marker id="acicd" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#475569"/></marker><marker id="aconfig" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#b45309"/></marker><marker id="acontrol" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#7c3aed"/></marker></defs><path class="es" d="M172,197 L192,197 L192,197 L212,197" stroke="#16a34a" stroke-width="1.5" fill="none"  data-flow="telemetry" data-from="node" data-to="prom" marker-end="url(#atelemetry)"/>
+<path class="es" d="M172,297 L192,297 L192,297 L212,297" stroke="#1e293b" stroke-width="1.5" fill="none"  data-flow="data" data-from="fluentd" data-to="es" marker-end="url(#adata)"/><text x="192" y="289" class="elbl">ship logs</text>
+<path class="es" d="M172,397 L192,397 L192,397 L212,397" stroke="#16a34a" stroke-width="1.5" fill="none"  data-flow="telemetry" data-from="otel" data-to="jaeger" marker-end="url(#atelemetry)"/><text x="192" y="389" class="elbl">export spans</text>
+<path class="es" d="M372,197 L384,197 L384,297 L397,297" stroke="#16a34a" stroke-width="1.5" fill="none"  data-flow="telemetry" data-from="prom" data-to="grafana" marker-end="url(#atelemetry)"/>
+<path class="es" d="M372,297 L384,297 L384,297 L397,297" stroke="#1e293b" stroke-width="1.5" fill="none"  data-flow="data" data-from="es" data-to="grafana" marker-end="url(#adata)"/>
+<path class="es" d="M372,397 L384,397 L384,297 L397,297" stroke="#1e293b" stroke-width="1.5" fill="none"  data-flow="data" data-from="jaeger" data-to="grafana" marker-end="url(#adata)"/>
+<path class="ea" d="M557,297 L577,297 L577,297 L597,297" stroke="#ea580c" stroke-width="1.5" fill="none" stroke-dasharray="5,4" data-flow="async" data-from="grafana" data-to="am" marker-end="url(#aasync)"/><text x="577" y="289" class="elbl">alerts</text></svg></div></div>
+<div class="legend"><div class="ltit">FLOWS</div><label class="lrow"><input type="checkbox" checked data-flow="data"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#1e293b" stroke-width="2" style=""/></svg><span>Data path</span></label>
+<label class="lrow"><input type="checkbox" checked data-flow="async"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#ea580c" stroke-width="2" style="stroke-dasharray:5,4"/></svg><span>Async / events</span></label>
+<label class="lrow"><input type="checkbox" checked data-flow="telemetry"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#16a34a" stroke-width="2" style=""/></svg><span>Telemetry</span></label>
 </div>
-<div class="ctrl">
-  <button class="cb" id="zi">+</button>
-  <button class="cb" id="zo">−</button>
-  <button class="cb" id="zr" style="font-size:12px">⌖</button>
-</div>
-<div class="hint">Scroll to zoom · Drag to pan · Hover nodes for details</div>
-<div class="tip" id="tp"></div>
-<svg id="cv" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <marker id="a-blue"   markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#3b82f6"/></marker>
-  <marker id="a-green"  markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#22c55e"/></marker>
-  <marker id="a-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#f97316"/></marker>
-  <marker id="a-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#a855f7"/></marker>
-  <marker id="a-red"    markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ef4444"/></marker>
-  <marker id="a-cyan"   markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#06b6d4"/></marker>
-  <marker id="a-yellow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eab308"/></marker>
-</defs>
-<g id="dg">
-<path d="M190,86.0 C230.0,86.0 230.0,86.0 270,86.0" fill="none" stroke="#f97316" stroke-width="1.5" class="fe" marker-end="url(#a-orange)"/>
-<path d="M190,206.0 C230.0,206.0 230.0,206.0 270,206.0" fill="none" stroke="#22c55e" stroke-width="1.5" class="fe" marker-end="url(#a-green)"/>
-<path d="M190,326.0 C230.0,326.0 230.0,326.0 270,326.0" fill="none" stroke="#06b6d4" stroke-width="1.5" class="fe" marker-end="url(#a-cyan)"/>
-<path d="M410,86.0 C455.0,86.0 455.0,206.0 500,206.0" fill="none" stroke="#f97316" stroke-width="1.5" class="fe" marker-end="url(#a-orange)"/>
-<path d="M420,206.0 C460.0,206.0 460.0,206.0 500,206.0" fill="none" stroke="#22c55e" stroke-width="1.5" class="fe" marker-end="url(#a-green)"/>
-<path d="M410,326.0 C455.0,326.0 455.0,206.0 500,206.0" fill="none" stroke="#06b6d4" stroke-width="1.5" class="fe" marker-end="url(#a-cyan)"/>
-<path d="M670,206.0 C710.0,206.0 710.0,206.0 750,206.0" fill="none" stroke="#ef4444" stroke-width="1.5" class="fe" marker-end="url(#a-red)"/><text x="710.0" y="196.0" text-anchor="middle" fill="#444" font-size="10">alerts</text>
-<g class="ng" data-tip="node_exporter for host metrics, cAdvisor for container CPU/memory, kube-state-metrics for K8s objects" style="--glow:#f97316"><rect class="nr" x="40" y="60" width="150" height="52" rx="8" fill="#1f1000" stroke="#f97316" stroke-width="1.5"/><text x="115.0" y="83.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">node_exporter</text><text x="115.0" y="98.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">cAdvisor</text></g>
-<g class="ng" data-tip="Prometheus TSDB — scrapes all exporters every 15s, 15-day local retention, remote-write to Thanos" style="--glow:#f97316"><rect class="nr" x="270" y="60" width="140" height="52" rx="8" fill="#1f1000" stroke="#f97316" stroke-width="1.5"/><text x="340.0" y="83.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">Prometheus</text><text x="340.0" y="98.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">TSDB</text></g>
-<g class="ng" data-tip="Fluentd DaemonSet — collects container logs, enriches with pod labels, ships to Elasticsearch" style="--glow:#22c55e"><rect class="nr" x="40" y="180" width="150" height="52" rx="8" fill="#0a1f12" stroke="#22c55e" stroke-width="1.5"/><text x="115.0" y="203.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">Fluentd</text><text x="115.0" y="218.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">DaemonSet</text></g>
-<g class="ng" data-tip="Elasticsearch — hot/warm/cold tiers: 7d hot SSD, 30d warm, 90d cold S3 snapshot" style="--glow:#22c55e"><rect class="nr" x="270" y="180" width="150" height="52" rx="8" fill="#0a1f12" stroke="#22c55e" stroke-width="1.5"/><text x="345.0" y="203.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">Elasticsearch</text><text x="345.0" y="218.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">Cluster</text></g>
-<g class="ng" data-tip="OpenTelemetry auto-instrumentation — zero-code tracing for Python, Java, Go services via agent" style="--glow:#06b6d4"><rect class="nr" x="40" y="300" width="150" height="52" rx="8" fill="#051520" stroke="#06b6d4" stroke-width="1.5"/><text x="115.0" y="323.75" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="500">OTel SDK</text><text x="115.0" y="338.75" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="500">(auto-instr.)</text></g>
-<g class="ng" data-tip="Jaeger — trace storage and UI; Badger backend for dev, Elasticsearch for prod" style="--glow:#06b6d4"><rect class="nr" x="270" y="300" width="140" height="52" rx="8" fill="#051520" stroke="#06b6d4" stroke-width="1.5"/><text x="340.0" y="323.75" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="500">Jaeger</text><text x="340.0" y="338.75" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="500">Tracing</text></g>
-<g class="ng" data-tip="Grafana unifies all three pillars — click a metric spike → see logs → jump to trace. Exemplars link metrics to traces" style="--glow:#f97316"><rect class="nr" x="500" y="180" width="170" height="52" rx="8" fill="#1f1000" stroke="#f97316" stroke-width="1.5"/><text x="585.0" y="203.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">Grafana</text><text x="585.0" y="218.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">Correlation Layer</text></g>
-<g class="ng" data-tip="Alertmanager — alert routing by team; annotations link to incident runbooks in Notion" style="--glow:#ef4444"><rect class="nr" x="750" y="180" width="160" height="52" rx="8" fill="#200a0a" stroke="#ef4444" stroke-width="1.5"/><text x="830.0" y="203.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">Alertmanager</text><text x="830.0" y="218.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">+ Runbooks</text></g>
-</g>
-</svg>
+<div class="zctrl"><button class="zb" id="zi">+</button><button class="zb" id="zo">−</button><button class="zb" id="zr" style="font-size:10px">⌖</button></div>
+<div class="hint">Hover to focus · click to pin<br>use legend to filter flows</div>
 <script>
-const sv=document.getElementById('cv'),g=document.getElementById('dg'),tp=document.getElementById('tp');
+const cw=document.getElementById('cw'),ci=document.getElementById('ci');
 let sc=1,tx=0,ty=0,dr=false,lx=0,ly=0;
-function aT(){g.setAttribute('transform',`translate(${tx},${ty}) scale(${sc})`);}
-sv.addEventListener('wheel',e=>{e.preventDefault();const r=sv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top,d=e.deltaY>0?.88:1.12,ns=Math.max(.1,Math.min(6,sc*d));tx=mx-(mx-tx)*(ns/sc);ty=my-(my-ty)*(ns/sc);sc=ns;aT();},{passive:false});
-sv.addEventListener('mousedown',e=>{if(!e.target.closest('.ng')){dr=true;lx=e.clientX;ly=e.clientY;}});
+function aT(){ci.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;}
+cw.addEventListener('wheel',e=>{e.preventDefault();const r=cw.getBoundingClientRect(),mx=e.clientX-r.left-tx,my=e.clientY-r.top-ty,d=e.deltaY>0?.88:1.12,ns=Math.max(.25,Math.min(3,sc*d));tx-=mx*(ns-sc);ty-=my*(ns-sc);sc=ns;aT();},{passive:false});
+cw.addEventListener('mousedown',e=>{if(!e.target.closest('.node')){dr=true;lx=e.clientX;ly=e.clientY;}});
 window.addEventListener('mousemove',e=>{if(!dr)return;tx+=e.clientX-lx;ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;aT();});
 window.addEventListener('mouseup',()=>dr=false);
-document.getElementById('zi').onclick=()=>{sc=Math.min(6,sc*1.2);aT();};
-document.getElementById('zo').onclick=()=>{sc=Math.max(.1,sc/1.2);aT();};
+document.getElementById('zi').onclick=()=>{sc=Math.min(3,sc*1.2);aT();};
+document.getElementById('zo').onclick=()=>{sc=Math.max(.25,sc/1.2);aT();};
 document.getElementById('zr').onclick=()=>{sc=1;tx=0;ty=0;aT();};
-window.addEventListener('load',()=>{const b=g.getBBox(),sw=sv.clientWidth,sh=sv.clientHeight;sc=Math.min(sw/(b.width+160),sh/(b.height+160),1.5);tx=(sw-b.width*sc)/2-b.x*sc;ty=(sh-b.height*sc)/2-b.y*sc;aT();});
-document.querySelectorAll('.ng[data-tip]').forEach(n=>{n.addEventListener('mouseenter',()=>{tp.textContent=n.dataset.tip;tp.classList.add('on');});n.addEventListener('mousemove',e=>{tp.style.left=(e.clientX+16)+'px';tp.style.top=(e.clientY-8)+'px';});n.addEventListener('mouseleave',()=>tp.classList.remove('on'));});
+
+const allNodes=document.querySelectorAll('.node');
+let pinned=null;
+function focusNode(n){
+  allNodes.forEach(x=>x!==n?x.classList.add('dimmed'):x.classList.remove('dimmed'));
+  n.classList.add('focused');
+  const id=n.dataset.id;
+  document.querySelectorAll('path[data-flow]').forEach(p=>p.classList.toggle('dim',p.dataset.from!==id&&p.dataset.to!==id));
+}
+function clearFocus(){allNodes.forEach(x=>x.classList.remove('dimmed','focused','pinned'));document.querySelectorAll('path[data-flow]').forEach(p=>p.classList.remove('dim'));}
+allNodes.forEach(n=>{
+  n.addEventListener('mouseenter',()=>{if(!pinned)focusNode(n);});
+  n.addEventListener('mouseleave',()=>{if(!pinned)clearFocus();});
+  n.addEventListener('click',e=>{e.stopPropagation();if(pinned===n){pinned=null;clearFocus();}else{pinned=n;clearFocus();n.classList.add('pinned');focusNode(n);}});
+});
+document.body.addEventListener('click',()=>{if(pinned){pinned=null;clearFocus();}});
+document.querySelectorAll('.lrow input').forEach(cb=>{
+  cb.addEventListener('change',()=>{
+    document.querySelectorAll(`path[data-flow="${cb.dataset.flow}"]`).forEach(p=>p.style.display=cb.checked?'':'none');
+  });
+});
 </script></body></html>

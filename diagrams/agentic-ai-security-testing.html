@@ -1,80 +1,102 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Agentic AI Security Testing — Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif}
-.bar{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(0,0,0,.95);border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;backdrop-filter:blur(12px)}
-.bl{display:flex;align-items:center;gap:10px}
-.bt{color:#fff;font-size:14px;font-weight:600}
-.bg{color:#3b82f6;font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);padding:3px 9px;border-radius:4px}
-.bb{color:#3b82f6;font-size:13px;text-decoration:none;border:1px solid rgba(59,130,246,.4);padding:7px 16px;border-radius:6px;transition:.2s}
-.bb:hover{background:#3b82f6;color:#fff}
-.ctrl{position:fixed;bottom:24px;right:24px;z-index:100;display:flex;flex-direction:column;gap:6px}
-.cb{width:36px;height:36px;background:#0d0d0d;border:1px solid #222;border-radius:8px;color:#777;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
-.cb:hover{background:#141414;border-color:#3b82f6;color:#3b82f6}
-.hint{position:fixed;bottom:28px;left:24px;color:#252525;font-size:11px;z-index:100;line-height:1.9}
-#cv{display:block;width:100vw;height:calc(100vh - 52px);margin-top:52px;cursor:grab}
-#cv:active{cursor:grabbing}
-.fe{stroke-dasharray:8 5;animation:fl 1.8s linear infinite}
-@keyframes fl{to{stroke-dashoffset:-26}}
-.ng{cursor:pointer}
-.ng:hover .nr{filter:drop-shadow(0 0 14px var(--glow,#3b82f6));stroke-width:2.5}
-.ng:hover text{fill:#fff!important}
-.tip{position:fixed;background:#0d0d0d;border:1px solid #2a2a2a;color:#bbb;padding:9px 13px;border-radius:8px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:200;max-width:260px;line-height:1.6;box-shadow:0 8px 32px rgba(0,0,0,.7)}
-.tip.on{opacity:1}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f1f5f9;font-family:Inter,system-ui,sans-serif;min-height:100vh;}
+.hdr{background:#fff;border-bottom:1px solid #e2e8f0;padding:28px 44px 24px;position:relative;}
+.bc{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:10px;}
+.htitle{font-size:24px;font-weight:700;color:#0f172a;margin-bottom:8px;}
+.hdesc{font-size:13px;color:#64748b;max-width:580px;line-height:1.65;}
+.chips{position:absolute;top:28px;right:44px;display:flex;flex-direction:column;gap:6px;}
+.chip{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 14px;}
+.chipk{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin-bottom:3px;}
+.chipv{font-size:12px;font-weight:600;color:#0f172a;}
+.bbtn{position:absolute;bottom:20px;right:44px;font-size:12px;color:#3b82f6;text-decoration:none;border:1px solid #bfdbfe;padding:5px 12px;border-radius:6px;transition:.2s;}
+.bbtn:hover{background:#3b82f6;color:#fff;border-color:#3b82f6;}
+.cwrap{margin:20px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;cursor:grab;user-select:none;}
+.cwrap:active{cursor:grabbing;}
+.cinner{position:relative;transform-origin:0 0;}
+.lane{position:absolute;top:0;bottom:0;border-right:1px solid #f1f5f9;pointer-events:none;}
+.lhdr{position:absolute;top:16px;left:14px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#cbd5e1;white-space:nowrap;}
+.node{position:absolute;height:70px;background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s,box-shadow .2s,opacity .25s;}
+.node:hover,.node.focused{border-color:#3b82f6;box-shadow:0 0 0 3px #3b82f612;z-index:10;}
+.node.pinned{border-color:#2563eb;box-shadow:0 0 0 4px #2563eb1a;z-index:11;}
+.node.dimmed{opacity:.15;pointer-events:none;}
+.ni{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;letter-spacing:-.02em;}
+.nc{flex:1;min-width:0;}
+.nname{font-size:12px;font-weight:600;color:#0f172a;line-height:1.3;}
+.nsub{font-size:10px;color:#94a3b8;margin-top:2px;line-height:1.4;}
+.nbadge{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;border-top:1px solid #f1f5f9;padding-top:4px;margin-top:4px;}
+.esvg{position:absolute;inset:0;pointer-events:none;overflow:visible;}
+.ea{animation:fl 1.6s linear infinite;}
+@keyframes fl{to{stroke-dashoffset:-18;}}
+.elbl{font-size:9px;fill:#94a3b8;font-family:Inter,sans-serif;}
+path.dim{opacity:.08!important;}
+.legend{position:fixed;bottom:24px;right:24px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;z-index:200;box-shadow:0 4px 20px #0000000d;}
+.ltit{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:10px;}
+.lrow{display:flex;align-items:center;gap:8px;font-size:11px;color:#374151;padding:3px 0;cursor:pointer;}
+.lrow input{cursor:pointer;accent-color:#3b82f6;width:13px;height:13px;}
+.zctrl{position:fixed;bottom:24px;left:24px;display:flex;flex-direction:column;gap:5px;z-index:200;}
+.zb{width:32px;height:32px;background:#fff;border:1px solid #e2e8f0;border-radius:7px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0000000a;transition:.2s;}
+.zb:hover{border-color:#3b82f6;color:#3b82f6;}
+.hint{position:fixed;bottom:66px;left:24px;font-size:10px;color:#cbd5e1;z-index:200;line-height:1.8;}
 </style></head><body>
-<div class="bar">
-  <div class="bl"><span class="bt">Agentic AI Security Testing</span><span class="bg">OWASP · Python · CI/CD</span></div>
-  <a href="https://barry-patil.github.io/#projects" class="bb">← Portfolio</a>
+<div class="hdr"><div class="bc">CASE STUDY · DEVOPS & INFRASTRUCTURE</div><h1 class="htitle">Agentic AI Security Testing</h1><p class="hdesc">Automated OWASP LLM Top-10 scanner. Sends 200+ adversarial prompts to target LLMs, evaluates responses for injection, disclosure, and excessive agency, and blocks CI on critical findings.</p><div class="chips"><div class="chip"><div class="chipk">TARGET</div><div class="chipv">GPT-4 · Claude</div></div><div class="chip"><div class="chipk">STANDARD</div><div class="chipv">OWASP LLM Top 10</div></div><div class="chip"><div class="chipk">OUTPUT</div><div class="chipv">HTML Report</div></div><div class="chip"><div class="chipk">GATE</div><div class="chipv">GitHub Actions</div></div></div><a href="https://barry-patil.github.io/#projects" class="bbtn">← Portfolio</a></div>
+<div class="cwrap" id="cw"><div class="cinner" id="ci" style="width:925px;height:482px;"><div class="lane" style="left:0px;width:185px;height:482px;"><span class="lhdr">01 · CONFIG</span></div><div class="lane" style="left:185px;width:185px;height:482px;"><span class="lhdr">02 · ORCHESTRATION</span></div><div class="lane" style="left:370px;width:185px;height:482px;"><span class="lhdr">03 · TARGET</span></div><div class="lane" style="left:555px;width:185px;height:482px;"><span class="lhdr">04 · EVALUATION</span></div><div class="lane" style="left:740px;width:185px;height:482px;"><span class="lhdr">05 · OUTPUT</span></div><div class="node" id="n-lib" style="left:12px;top:162px;width:160px;" data-id="lib"><div class="ni" style="background:#ef444418;color:#ef4444;">📚</div><div class="nc"><div class="nname">Prompt Library</div><div class="nsub">200+ adversarial prompts</div></div></div>
+<div class="node" id="n-cfg" style="left:12px;top:362px;width:160px;" data-id="cfg"><div class="ni" style="background:#eab30818;color:#eab308;">⚙</div><div class="nc"><div class="nname">Test Config YAML</div><div class="nsub">target · categories · threshold</div></div></div>
+<div class="node" id="n-orch" style="left:197px;top:262px;width:160px;" data-id="orch"><div class="ni" style="background:#3b82f618;color:#3b82f6;">Py</div><div class="nc"><div class="nname">Test Orchestrator</div><div class="nsub">Python · drives all tests</div><div class="nbadge">ORCHESTRATOR</div></div></div>
+<div class="node" id="n-llm" style="left:382px;top:162px;width:160px;" data-id="llm"><div class="ni" style="background:#a855f718;color:#a855f7;">AI</div><div class="nc"><div class="nname">Target LLM</div><div class="nsub">GPT-4 · Claude · custom</div><div class="nbadge">MODEL</div></div></div>
+<div class="node" id="n-owasp" style="left:382px;top:362px;width:160px;" data-id="owasp"><div class="ni" style="background:#ef444418;color:#ef4444;">🛡</div><div class="nc"><div class="nname">OWASP Modules</div><div class="nsub">LLM01·06·08·10</div></div></div>
+<div class="node" id="n-eval" style="left:567px;top:262px;width:160px;" data-id="eval"><div class="ni" style="background:#eab30818;color:#eab308;">✓</div><div class="nc"><div class="nname">Result Evaluator</div><div class="nsub">pass / fail · severity</div><div class="nbadge">EVALUATOR</div></div></div>
+<div class="node" id="n-report" style="left:752px;top:162px;width:160px;" data-id="report"><div class="ni" style="background:#16a34a18;color:#16a34a;">📄</div><div class="nc"><div class="nname">HTML Report</div><div class="nsub">per-test · remediation hints</div></div></div>
+<div class="node" id="n-ci" style="left:752px;top:362px;width:160px;" data-id="ci"><div class="ni" style="background:#3b82f618;color:#3b82f6;">CI</div><div class="nc"><div class="nname">GitHub Actions</div><div class="nsub">blocks PR on CRITICAL</div><div class="nbadge">CI GATE</div></div></div><svg class="esvg" width="925" height="482"><defs><marker id="auser" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2563eb"/></marker><marker id="adata" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1e293b"/></marker><marker id="aasync" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ea580c"/></marker><marker id="atelemetry" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#16a34a"/></marker><marker id="acicd" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#475569"/></marker><marker id="aconfig" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#b45309"/></marker><marker id="acontrol" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#7c3aed"/></marker></defs><path class="es" d="M172,197 L184,197 L184,297 L197,297" stroke="#2563eb" stroke-width="2.0" fill="none"  data-flow="user" data-from="lib" data-to="orch" marker-end="url(#auser)"/>
+<path class="ea" d="M172,397 L184,397 L184,297 L197,297" stroke="#b45309" stroke-width="1.5" fill="none" stroke-dasharray="3,3" data-flow="config" data-from="cfg" data-to="orch" marker-end="url(#aconfig)"/>
+<path class="es" d="M357,297 L370,297 L370,197 L382,197" stroke="#2563eb" stroke-width="2.0" fill="none"  data-flow="user" data-from="orch" data-to="llm" marker-end="url(#auser)"/><text x="370" y="239" class="elbl">send prompts</text>
+<path class="ea" d="M357,297 L370,297 L370,397 L382,397" stroke="#7c3aed" stroke-width="1.5" fill="none" stroke-dasharray="6,3" data-flow="control" data-from="orch" data-to="owasp" marker-end="url(#acontrol)"/>
+<path class="es" d="M542,197 L554,197 L554,297 L567,297" stroke="#1e293b" stroke-width="1.5" fill="none"  data-flow="data" data-from="llm" data-to="eval" marker-end="url(#adata)"/>
+<path class="es" d="M542,397 L554,397 L554,297 L567,297" stroke="#1e293b" stroke-width="1.5" fill="none"  data-flow="data" data-from="owasp" data-to="eval" marker-end="url(#adata)"/>
+<path class="es" d="M727,297 L740,297 L740,197 L752,197" stroke="#1e293b" stroke-width="1.5" fill="none"  data-flow="data" data-from="eval" data-to="report" marker-end="url(#adata)"/>
+<path class="ea" d="M727,297 L740,297 L740,397 L752,397" stroke="#475569" stroke-width="1.5" fill="none" stroke-dasharray="8,4" data-flow="cicd" data-from="eval" data-to="ci" marker-end="url(#acicd)"/><text x="740" y="339" class="elbl">pass / fail</text></svg></div></div>
+<div class="legend"><div class="ltit">FLOWS</div><label class="lrow"><input type="checkbox" checked data-flow="user"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#2563eb" stroke-width="2" style=""/></svg><span>User traffic</span></label>
+<label class="lrow"><input type="checkbox" checked data-flow="data"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#1e293b" stroke-width="2" style=""/></svg><span>Data path</span></label>
+<label class="lrow"><input type="checkbox" checked data-flow="cicd"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#475569" stroke-width="2" style="stroke-dasharray:8,4"/></svg><span>CI/CD</span></label>
+<label class="lrow"><input type="checkbox" checked data-flow="config"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#b45309" stroke-width="2" style="stroke-dasharray:3,3"/></svg><span>Config / secrets</span></label>
+<label class="lrow"><input type="checkbox" checked data-flow="control"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#7c3aed" stroke-width="2" style="stroke-dasharray:6,3"/></svg><span>Control plane</span></label>
 </div>
-<div class="ctrl">
-  <button class="cb" id="zi">+</button>
-  <button class="cb" id="zo">−</button>
-  <button class="cb" id="zr" style="font-size:12px">⌖</button>
-</div>
-<div class="hint">Scroll to zoom · Drag to pan · Hover nodes for details</div>
-<div class="tip" id="tp"></div>
-<svg id="cv" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <marker id="a-blue"   markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#3b82f6"/></marker>
-  <marker id="a-green"  markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#22c55e"/></marker>
-  <marker id="a-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#f97316"/></marker>
-  <marker id="a-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#a855f7"/></marker>
-  <marker id="a-red"    markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ef4444"/></marker>
-  <marker id="a-cyan"   markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#06b6d4"/></marker>
-  <marker id="a-yellow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eab308"/></marker>
-</defs>
-<g id="dg">
-<path d="M190,106.0 C230.0,106.0 230.0,166.0 270,166.0" fill="none" stroke="#ef4444" stroke-width="1.5" class="fe" marker-end="url(#a-red)"/>
-<path d="M190,226.0 C230.0,226.0 230.0,166.0 270,166.0" fill="none" stroke="#eab308" stroke-width="1.5" class="fe" marker-end="url(#a-yellow)"/>
-<path d="M420,166.0 C460.0,166.0 460.0,86.0 500,86.0" fill="none" stroke="#3b82f6" stroke-width="1.5" class="fe" marker-end="url(#a-blue)"/><text x="460.0" y="116.0" text-anchor="middle" fill="#444" font-size="10">adversarial prompts</text>
-<path d="M420,166.0 C460.0,166.0 460.0,206.0 500,206.0" fill="none" stroke="#3b82f6" stroke-width="1.5" class="fe" marker-end="url(#a-blue)"/>
-<path d="M660,86.0 C700.0,86.0 700.0,166.0 740,166.0" fill="none" stroke="#a855f7" stroke-width="1.5" class="fe" marker-end="url(#a-purple)"/>
-<path d="M660,206.0 C700.0,206.0 700.0,166.0 740,166.0" fill="none" stroke="#ef4444" stroke-width="1.5" class="fe" marker-end="url(#a-red)"/>
-<path d="M890,166.0 C930.0,166.0 930.0,86.0 970,86.0" fill="none" stroke="#22c55e" stroke-width="1.5" class="fe" marker-end="url(#a-green)"/>
-<path d="M890,166.0 C930.0,166.0 930.0,206.0 970,206.0" fill="none" stroke="#eab308" stroke-width="1.5" class="fe" marker-end="url(#a-yellow)"/><text x="930.0" y="176.0" text-anchor="middle" fill="#444" font-size="10">pass / fail</text>
-<g class="ng" data-tip="200+ adversarial prompts per category — injection, jailbreak, exfiltration, plugin abuse" style="--glow:#ef4444"><rect class="nr" x="40" y="80" width="150" height="52" rx="8" fill="#200a0a" stroke="#ef4444" stroke-width="1.5"/><text x="115.0" y="103.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">Attack Prompt</text><text x="115.0" y="118.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">Library</text></g>
-<g class="ng" data-tip="YAML config — target URL, model ID, categories to test, severity threshold for CI gate" style="--glow:#eab308"><rect class="nr" x="40" y="200" width="150" height="52" rx="8" fill="#181400" stroke="#eab308" stroke-width="1.5"/><text x="115.0" y="223.75" text-anchor="middle" fill="#fde047" font-size="12" font-weight="500">Test Config</text><text x="115.0" y="238.75" text-anchor="middle" fill="#fde047" font-size="12" font-weight="500">YAML</text></g>
-<g class="ng" data-tip="Python orchestrator — drives all tests, sends adversarial prompts, collects responses" style="--glow:#3b82f6"><rect class="nr" x="270" y="140" width="150" height="52" rx="8" fill="#0a1628" stroke="#3b82f6" stroke-width="1.5"/><text x="345.0" y="163.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">Test</text><text x="345.0" y="178.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">Orchestrator</text></g>
-<g class="ng" data-tip="Target LLM under test — OpenAI GPT-4, Anthropic Claude, or custom endpoint" style="--glow:#a855f7"><rect class="nr" x="500" y="60" width="160" height="52" rx="8" fill="#150a28" stroke="#a855f7" stroke-width="1.5"/><text x="580.0" y="83.75" text-anchor="middle" fill="#d8b4fe" font-size="12" font-weight="500">Target LLM</text><text x="580.0" y="98.75" text-anchor="middle" fill="#d8b4fe" font-size="12" font-weight="500">(GPT-4 / Claude)</text></g>
-<g class="ng" data-tip="LLM01 Prompt Injection · LLM06 Sensitive Disclosure · LLM08 Excessive Agency · LLM10 Model Theft" style="--glow:#ef4444"><rect class="nr" x="500" y="180" width="160" height="52" rx="8" fill="#200a0a" stroke="#ef4444" stroke-width="1.5"/><text x="580.0" y="203.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">OWASP LLM</text><text x="580.0" y="218.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">Top-10 Modules</text></g>
-<g class="ng" data-tip="Evaluator — classifies each response as pass/fail, assigns severity (INFO/MEDIUM/CRITICAL)" style="--glow:#eab308"><rect class="nr" x="740" y="140" width="150" height="52" rx="8" fill="#181400" stroke="#eab308" stroke-width="1.5"/><text x="815.0" y="163.75" text-anchor="middle" fill="#fde047" font-size="12" font-weight="500">Result</text><text x="815.0" y="178.75" text-anchor="middle" fill="#fde047" font-size="12" font-weight="500">Evaluator</text></g>
-<g class="ng" data-tip="HTML report — per-test breakdown, severity scores, remediation hints per OWASP category" style="--glow:#22c55e"><rect class="nr" x="970" y="60" width="160" height="52" rx="8" fill="#0a1f12" stroke="#22c55e" stroke-width="1.5"/><text x="1050.0" y="83.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">HTML Security</text><text x="1050.0" y="98.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">Report</text></g>
-<g class="ng" data-tip="GitHub Actions — blocks PR merge on any CRITICAL finding; posts summary as PR comment" style="--glow:#3b82f6"><rect class="nr" x="970" y="180" width="160" height="52" rx="8" fill="#0a1628" stroke="#3b82f6" stroke-width="1.5"/><text x="1050.0" y="203.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">GitHub Actions</text><text x="1050.0" y="218.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">CI Gate</text></g>
-</g>
-</svg>
+<div class="zctrl"><button class="zb" id="zi">+</button><button class="zb" id="zo">−</button><button class="zb" id="zr" style="font-size:10px">⌖</button></div>
+<div class="hint">Hover to focus · click to pin<br>use legend to filter flows</div>
 <script>
-const sv=document.getElementById('cv'),g=document.getElementById('dg'),tp=document.getElementById('tp');
+const cw=document.getElementById('cw'),ci=document.getElementById('ci');
 let sc=1,tx=0,ty=0,dr=false,lx=0,ly=0;
-function aT(){g.setAttribute('transform',`translate(${tx},${ty}) scale(${sc})`);}
-sv.addEventListener('wheel',e=>{e.preventDefault();const r=sv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top,d=e.deltaY>0?.88:1.12,ns=Math.max(.1,Math.min(6,sc*d));tx=mx-(mx-tx)*(ns/sc);ty=my-(my-ty)*(ns/sc);sc=ns;aT();},{passive:false});
-sv.addEventListener('mousedown',e=>{if(!e.target.closest('.ng')){dr=true;lx=e.clientX;ly=e.clientY;}});
+function aT(){ci.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;}
+cw.addEventListener('wheel',e=>{e.preventDefault();const r=cw.getBoundingClientRect(),mx=e.clientX-r.left-tx,my=e.clientY-r.top-ty,d=e.deltaY>0?.88:1.12,ns=Math.max(.25,Math.min(3,sc*d));tx-=mx*(ns-sc);ty-=my*(ns-sc);sc=ns;aT();},{passive:false});
+cw.addEventListener('mousedown',e=>{if(!e.target.closest('.node')){dr=true;lx=e.clientX;ly=e.clientY;}});
 window.addEventListener('mousemove',e=>{if(!dr)return;tx+=e.clientX-lx;ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;aT();});
 window.addEventListener('mouseup',()=>dr=false);
-document.getElementById('zi').onclick=()=>{sc=Math.min(6,sc*1.2);aT();};
-document.getElementById('zo').onclick=()=>{sc=Math.max(.1,sc/1.2);aT();};
+document.getElementById('zi').onclick=()=>{sc=Math.min(3,sc*1.2);aT();};
+document.getElementById('zo').onclick=()=>{sc=Math.max(.25,sc/1.2);aT();};
 document.getElementById('zr').onclick=()=>{sc=1;tx=0;ty=0;aT();};
-window.addEventListener('load',()=>{const b=g.getBBox(),sw=sv.clientWidth,sh=sv.clientHeight;sc=Math.min(sw/(b.width+160),sh/(b.height+160),1.5);tx=(sw-b.width*sc)/2-b.x*sc;ty=(sh-b.height*sc)/2-b.y*sc;aT();});
-document.querySelectorAll('.ng[data-tip]').forEach(n=>{n.addEventListener('mouseenter',()=>{tp.textContent=n.dataset.tip;tp.classList.add('on');});n.addEventListener('mousemove',e=>{tp.style.left=(e.clientX+16)+'px';tp.style.top=(e.clientY-8)+'px';});n.addEventListener('mouseleave',()=>tp.classList.remove('on'));});
+
+const allNodes=document.querySelectorAll('.node');
+let pinned=null;
+function focusNode(n){
+  allNodes.forEach(x=>x!==n?x.classList.add('dimmed'):x.classList.remove('dimmed'));
+  n.classList.add('focused');
+  const id=n.dataset.id;
+  document.querySelectorAll('path[data-flow]').forEach(p=>p.classList.toggle('dim',p.dataset.from!==id&&p.dataset.to!==id));
+}
+function clearFocus(){allNodes.forEach(x=>x.classList.remove('dimmed','focused','pinned'));document.querySelectorAll('path[data-flow]').forEach(p=>p.classList.remove('dim'));}
+allNodes.forEach(n=>{
+  n.addEventListener('mouseenter',()=>{if(!pinned)focusNode(n);});
+  n.addEventListener('mouseleave',()=>{if(!pinned)clearFocus();});
+  n.addEventListener('click',e=>{e.stopPropagation();if(pinned===n){pinned=null;clearFocus();}else{pinned=n;clearFocus();n.classList.add('pinned');focusNode(n);}});
+});
+document.body.addEventListener('click',()=>{if(pinned){pinned=null;clearFocus();}});
+document.querySelectorAll('.lrow input').forEach(cb=>{
+  cb.addEventListener('change',()=>{
+    document.querySelectorAll(`path[data-flow="${cb.dataset.flow}"]`).forEach(p=>p.style.display=cb.checked?'':'none');
+  });
+});
 </script></body></html>

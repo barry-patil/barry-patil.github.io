@@ -1,78 +1,100 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>AI/ML Governance — Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif}
-.bar{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(0,0,0,.95);border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;backdrop-filter:blur(12px)}
-.bl{display:flex;align-items:center;gap:10px}
-.bt{color:#fff;font-size:14px;font-weight:600}
-.bg{color:#3b82f6;font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);padding:3px 9px;border-radius:4px}
-.bb{color:#3b82f6;font-size:13px;text-decoration:none;border:1px solid rgba(59,130,246,.4);padding:7px 16px;border-radius:6px;transition:.2s}
-.bb:hover{background:#3b82f6;color:#fff}
-.ctrl{position:fixed;bottom:24px;right:24px;z-index:100;display:flex;flex-direction:column;gap:6px}
-.cb{width:36px;height:36px;background:#0d0d0d;border:1px solid #222;border-radius:8px;color:#777;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
-.cb:hover{background:#141414;border-color:#3b82f6;color:#3b82f6}
-.hint{position:fixed;bottom:28px;left:24px;color:#252525;font-size:11px;z-index:100;line-height:1.9}
-#cv{display:block;width:100vw;height:calc(100vh - 52px);margin-top:52px;cursor:grab}
-#cv:active{cursor:grabbing}
-.fe{stroke-dasharray:8 5;animation:fl 1.8s linear infinite}
-@keyframes fl{to{stroke-dashoffset:-26}}
-.ng{cursor:pointer}
-.ng:hover .nr{filter:drop-shadow(0 0 14px var(--glow,#3b82f6));stroke-width:2.5}
-.ng:hover text{fill:#fff!important}
-.tip{position:fixed;background:#0d0d0d;border:1px solid #2a2a2a;color:#bbb;padding:9px 13px;border-radius:8px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:200;max-width:260px;line-height:1.6;box-shadow:0 8px 32px rgba(0,0,0,.7)}
-.tip.on{opacity:1}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f1f5f9;font-family:Inter,system-ui,sans-serif;min-height:100vh;}
+.hdr{background:#fff;border-bottom:1px solid #e2e8f0;padding:28px 44px 24px;position:relative;}
+.bc{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:10px;}
+.htitle{font-size:24px;font-weight:700;color:#0f172a;margin-bottom:8px;}
+.hdesc{font-size:13px;color:#64748b;max-width:580px;line-height:1.65;}
+.chips{position:absolute;top:28px;right:44px;display:flex;flex-direction:column;gap:6px;}
+.chip{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 14px;}
+.chipk{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin-bottom:3px;}
+.chipv{font-size:12px;font-weight:600;color:#0f172a;}
+.bbtn{position:absolute;bottom:20px;right:44px;font-size:12px;color:#3b82f6;text-decoration:none;border:1px solid #bfdbfe;padding:5px 12px;border-radius:6px;transition:.2s;}
+.bbtn:hover{background:#3b82f6;color:#fff;border-color:#3b82f6;}
+.cwrap{margin:20px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;cursor:grab;user-select:none;}
+.cwrap:active{cursor:grabbing;}
+.cinner{position:relative;transform-origin:0 0;}
+.lane{position:absolute;top:0;bottom:0;border-right:1px solid #f1f5f9;pointer-events:none;}
+.lhdr{position:absolute;top:16px;left:14px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#cbd5e1;white-space:nowrap;}
+.node{position:absolute;height:70px;background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s,box-shadow .2s,opacity .25s;}
+.node:hover,.node.focused{border-color:#3b82f6;box-shadow:0 0 0 3px #3b82f612;z-index:10;}
+.node.pinned{border-color:#2563eb;box-shadow:0 0 0 4px #2563eb1a;z-index:11;}
+.node.dimmed{opacity:.15;pointer-events:none;}
+.ni{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;letter-spacing:-.02em;}
+.nc{flex:1;min-width:0;}
+.nname{font-size:12px;font-weight:600;color:#0f172a;line-height:1.3;}
+.nsub{font-size:10px;color:#94a3b8;margin-top:2px;line-height:1.4;}
+.nbadge{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;border-top:1px solid #f1f5f9;padding-top:4px;margin-top:4px;}
+.esvg{position:absolute;inset:0;pointer-events:none;overflow:visible;}
+.ea{animation:fl 1.6s linear infinite;}
+@keyframes fl{to{stroke-dashoffset:-18;}}
+.elbl{font-size:9px;fill:#94a3b8;font-family:Inter,sans-serif;}
+path.dim{opacity:.08!important;}
+.legend{position:fixed;bottom:24px;right:24px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;z-index:200;box-shadow:0 4px 20px #0000000d;}
+.ltit{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:10px;}
+.lrow{display:flex;align-items:center;gap:8px;font-size:11px;color:#374151;padding:3px 0;cursor:pointer;}
+.lrow input{cursor:pointer;accent-color:#3b82f6;width:13px;height:13px;}
+.zctrl{position:fixed;bottom:24px;left:24px;display:flex;flex-direction:column;gap:5px;z-index:200;}
+.zb{width:32px;height:32px;background:#fff;border:1px solid #e2e8f0;border-radius:7px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0000000a;transition:.2s;}
+.zb:hover{border-color:#3b82f6;color:#3b82f6;}
+.hint{position:fixed;bottom:66px;left:24px;font-size:10px;color:#cbd5e1;z-index:200;line-height:1.8;}
 </style></head><body>
-<div class="bar">
-  <div class="bl"><span class="bt">AI/ML Governance</span><span class="bg">OPA · Sentinel · Terraform · EKS</span></div>
-  <a href="https://barry-patil.github.io/#projects" class="bb">← Portfolio</a>
+<div class="hdr"><div class="bc">CASE STUDY · DEVOPS & INFRASTRUCTURE</div><h1 class="htitle">AI/ML Governance</h1><p class="hdesc">Policy-as-code enforcement across the ML lifecycle. Sentinel blocks non-compliant Terraform plans; OPA Gatekeeper admission webhooks enforce ownership, data-residency, and EU AI Act classifications.</p><div class="chips"><div class="chip"><div class="chipk">IaC GATE</div><div class="chipv">Sentinel</div></div><div class="chip"><div class="chipk">K8s GATE</div><div class="chipv">OPA Gatekeeper</div></div><div class="chip"><div class="chipk">REGISTRY</div><div class="chipv">Git-backed policies</div></div><div class="chip"><div class="chipk">AUDIT</div><div class="chipv">Slack · SIEM</div></div></div><a href="https://barry-patil.github.io/#projects" class="bbtn">← Portfolio</a></div>
+<div class="cwrap" id="cw"><div class="cinner" id="ci" style="width:945px;height:482px;"><div class="lane" style="left:0px;width:185px;height:482px;"><span class="lhdr">01 · WORKFLOW</span></div><div class="lane" style="left:185px;width:185px;height:482px;"><span class="lhdr">02 · TERRAFORM</span></div><div class="lane" style="left:370px;width:185px;height:482px;"><span class="lhdr">03 · ADMISSION</span></div><div class="lane" style="left:555px;width:205px;height:482px;"><span class="lhdr">04 · POLICY ENGINE</span></div><div class="lane" style="left:760px;width:185px;height:482px;"><span class="lhdr">05 · AUDIT</span></div><div class="node" id="n-eng" style="left:12px;top:162px;width:160px;" data-id="eng"><div class="ni" style="background:#3b82f618;color:#3b82f6;">👤</div><div class="nc"><div class="nname">ML Engineer</div><div class="nsub">Terraform · kubectl submit</div></div></div>
+<div class="node" id="n-tfe" style="left:197px;top:162px;width:160px;" data-id="tfe"><div class="ni" style="background:#7c3aed18;color:#7c3aed;">TF</div><div class="nc"><div class="nname">Terraform Plan</div><div class="nsub">Cost · region · GPU type</div><div class="nbadge">PLAN</div></div></div>
+<div class="node" id="n-k8s" style="left:382px;top:262px;width:160px;" data-id="k8s"><div class="ni" style="background:#3b82f618;color:#3b82f6;">K8s</div><div class="nc"><div class="nname">K8s Admission</div><div class="nsub">Webhook intercepts deploys</div><div class="nbadge">WEBHOOK</div></div></div>
+<div class="node" id="n-sentinel" style="left:567px;top:162px;width:160px;" data-id="sentinel"><div class="ni" style="background:#ef444418;color:#ef4444;">Sen</div><div class="nc"><div class="nname">Sentinel</div><div class="nsub">Block GPU cost violations</div><div class="nbadge">POLICY</div></div></div>
+<div class="node" id="n-opa" style="left:567px;top:362px;width:160px;" data-id="opa"><div class="ni" style="background:#ef444418;color:#ef4444;">OPA</div><div class="nc"><div class="nname">OPA Gatekeeper</div><div class="nsub">Rego admission rules</div><div class="nbadge">POLICY</div></div></div>
+<div class="node" id="n-reg" style="left:772px;top:162px;width:160px;" data-id="reg"><div class="ni" style="background:#16a34a18;color:#16a34a;">Git</div><div class="nc"><div class="nname">Policy Registry</div><div class="nsub">Versioned Rego + Sentinel</div></div></div>
+<div class="node" id="n-audit" style="left:772px;top:362px;width:160px;" data-id="audit"><div class="ni" style="background:#64748b18;color:#64748b;">📋</div><div class="nc"><div class="nname">Audit Log</div><div class="nsub">Violations → Slack · SIEM</div></div></div><svg class="esvg" width="945" height="482"><defs><marker id="auser" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2563eb"/></marker><marker id="adata" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1e293b"/></marker><marker id="aasync" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ea580c"/></marker><marker id="atelemetry" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#16a34a"/></marker><marker id="acicd" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#475569"/></marker><marker id="aconfig" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#b45309"/></marker><marker id="acontrol" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#7c3aed"/></marker></defs><path class="es" d="M172,197 L184,197 L184,197 L197,197" stroke="#2563eb" stroke-width="2.0" fill="none"  data-flow="user" data-from="eng" data-to="tfe" marker-end="url(#auser)"/><text x="184" y="189" class="elbl">plan</text>
+<path class="es" d="M172,197 L277,197 L277,297 L382,297" stroke="#2563eb" stroke-width="2.0" fill="none"  data-flow="user" data-from="eng" data-to="k8s" marker-end="url(#auser)"/><text x="277" y="239" class="elbl">deploy</text>
+<path class="ea" d="M357,197 L462,197 L462,197 L567,197" stroke="#7c3aed" stroke-width="1.5" fill="none" stroke-dasharray="6,3" data-flow="control" data-from="tfe" data-to="sentinel" marker-end="url(#acontrol)"/>
+<path class="ea" d="M542,297 L554,297 L554,397 L567,397" stroke="#7c3aed" stroke-width="1.5" fill="none" stroke-dasharray="6,3" data-flow="control" data-from="k8s" data-to="opa" marker-end="url(#acontrol)"/>
+<path class="ea" d="M727,197 L750,197 L750,197 L772,197" stroke="#b45309" stroke-width="1.5" fill="none" stroke-dasharray="3,3" data-flow="config" data-from="sentinel" data-to="reg" marker-end="url(#aconfig)"/>
+<path class="ea" d="M727,397 L750,397 L750,197 L772,197" stroke="#b45309" stroke-width="1.5" fill="none" stroke-dasharray="3,3" data-flow="config" data-from="opa" data-to="reg" marker-end="url(#aconfig)"/>
+<path class="ea" d="M727,197 L750,197 L750,397 L772,397" stroke="#ea580c" stroke-width="1.5" fill="none" stroke-dasharray="5,4" data-flow="async" data-from="sentinel" data-to="audit" marker-end="url(#aasync)"/><text x="750" y="289" class="elbl">violation</text>
+<path class="ea" d="M727,397 L750,397 L750,397 L772,397" stroke="#ea580c" stroke-width="1.5" fill="none" stroke-dasharray="5,4" data-flow="async" data-from="opa" data-to="audit" marker-end="url(#aasync)"/></svg></div></div>
+<div class="legend"><div class="ltit">FLOWS</div><label class="lrow"><input type="checkbox" checked data-flow="user"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#2563eb" stroke-width="2" style=""/></svg><span>User traffic</span></label>
+<label class="lrow"><input type="checkbox" checked data-flow="async"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#ea580c" stroke-width="2" style="stroke-dasharray:5,4"/></svg><span>Async / events</span></label>
+<label class="lrow"><input type="checkbox" checked data-flow="config"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#b45309" stroke-width="2" style="stroke-dasharray:3,3"/></svg><span>Config / secrets</span></label>
+<label class="lrow"><input type="checkbox" checked data-flow="control"/><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#7c3aed" stroke-width="2" style="stroke-dasharray:6,3"/></svg><span>Control plane</span></label>
 </div>
-<div class="ctrl">
-  <button class="cb" id="zi">+</button>
-  <button class="cb" id="zo">−</button>
-  <button class="cb" id="zr" style="font-size:12px">⌖</button>
-</div>
-<div class="hint">Scroll to zoom · Drag to pan · Hover nodes for details</div>
-<div class="tip" id="tp"></div>
-<svg id="cv" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <marker id="a-blue"   markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#3b82f6"/></marker>
-  <marker id="a-green"  markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#22c55e"/></marker>
-  <marker id="a-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#f97316"/></marker>
-  <marker id="a-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#a855f7"/></marker>
-  <marker id="a-red"    markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ef4444"/></marker>
-  <marker id="a-cyan"   markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#06b6d4"/></marker>
-  <marker id="a-yellow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#eab308"/></marker>
-</defs>
-<g id="dg">
-<path d="M190,166.0 C230.0,166.0 230.0,86.0 270,86.0" fill="none" stroke="#f97316" stroke-width="1.5" class="fe" marker-end="url(#a-orange)"/><text x="230.0" y="116.0" text-anchor="middle" fill="#444" font-size="10">terraform plan</text>
-<path d="M190,166.0 C230.0,166.0 230.0,246.0 270,246.0" fill="none" stroke="#3b82f6" stroke-width="1.5" class="fe" marker-end="url(#a-blue)"/><text x="230.0" y="196.0" text-anchor="middle" fill="#444" font-size="10">kubectl apply</text>
-<path d="M420,86.0 C460.0,86.0 460.0,86.0 500,86.0" fill="none" stroke="#f97316" stroke-width="1.5" class="fe" marker-end="url(#a-orange)"/>
-<path d="M420,246.0 C460.0,246.0 460.0,246.0 500,246.0" fill="none" stroke="#3b82f6" stroke-width="1.5" class="fe" marker-end="url(#a-blue)"/>
-<path d="M650,86.0 C690.0,86.0 690.0,166.0 730,166.0" fill="none" stroke="#ef4444" stroke-width="1.5" class="fe" marker-end="url(#a-red)"/>
-<path d="M650,246.0 C690.0,246.0 690.0,166.0 730,166.0" fill="none" stroke="#ef4444" stroke-width="1.5" class="fe" marker-end="url(#a-red)"/>
-<path d="M880,166.0 C920.0,166.0 920.0,166.0 960,166.0" fill="none" stroke="#a855f7" stroke-width="1.5" class="fe" marker-end="url(#a-purple)"/>
-<g class="ng" data-tip="ML engineer submits Terraform plan or deploys to Kubernetes — governance intercepts both paths" style="--glow:#3b82f6"><rect class="nr" x="40" y="140" width="150" height="52" rx="8" fill="#0a1628" stroke="#3b82f6" stroke-width="1.5"/><text x="115.0" y="163.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">ML Engineer</text><text x="115.0" y="178.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">Workflow</text></g>
-<g class="ng" data-tip="Terraform plan — Sentinel checks block unauthorised GPU instance types (e.g., p4d.24xlarge) before apply" style="--glow:#f97316"><rect class="nr" x="270" y="60" width="150" height="52" rx="8" fill="#1f1000" stroke="#f97316" stroke-width="1.5"/><text x="345.0" y="83.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">Terraform</text><text x="345.0" y="98.75" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="500">Plan</text></g>
-<g class="ng" data-tip="K8s admission webhook — OPA Gatekeeper evaluates every deployment against policy bundles" style="--glow:#3b82f6"><rect class="nr" x="270" y="220" width="150" height="52" rx="8" fill="#0a1628" stroke="#3b82f6" stroke-width="1.5"/><text x="345.0" y="243.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">Kubernetes</text><text x="345.0" y="258.75" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="500">Admission</text></g>
-<g class="ng" data-tip="HashiCorp Sentinel — enforces cost limits, approved regions, and EU AI Act risk classification at plan time" style="--glow:#ef4444"><rect class="nr" x="500" y="60" width="150" height="52" rx="8" fill="#200a0a" stroke="#ef4444" stroke-width="1.5"/><text x="575.0" y="83.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">Sentinel</text><text x="575.0" y="98.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">Policies</text></g>
-<g class="ng" data-tip="OPA Gatekeeper — admission webhooks enforce model version labels, team ownership, and data-residency rules" style="--glow:#ef4444"><rect class="nr" x="500" y="220" width="150" height="52" rx="8" fill="#200a0a" stroke="#ef4444" stroke-width="1.5"/><text x="575.0" y="243.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">OPA</text><text x="575.0" y="258.75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="500">Gatekeeper</text></g>
-<g class="ng" data-tip="Git-backed policy registry — versioned Rego and Sentinel policies, PR-reviewed before enforcement" style="--glow:#a855f7"><rect class="nr" x="730" y="140" width="150" height="52" rx="8" fill="#150a28" stroke="#a855f7" stroke-width="1.5"/><text x="805.0" y="163.75" text-anchor="middle" fill="#d8b4fe" font-size="12" font-weight="500">Policy</text><text x="805.0" y="178.75" text-anchor="middle" fill="#d8b4fe" font-size="12" font-weight="500">Registry</text></g>
-<g class="ng" data-tip="Immutable audit log of all policy decisions; Slack alerts on violations with remediation links" style="--glow:#22c55e"><rect class="nr" x="960" y="140" width="150" height="52" rx="8" fill="#0a1f12" stroke="#22c55e" stroke-width="1.5"/><text x="1035.0" y="163.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">Audit Log</text><text x="1035.0" y="178.75" text-anchor="middle" fill="#86efac" font-size="12" font-weight="500">+ Alerts</text></g>
-</g>
-</svg>
+<div class="zctrl"><button class="zb" id="zi">+</button><button class="zb" id="zo">−</button><button class="zb" id="zr" style="font-size:10px">⌖</button></div>
+<div class="hint">Hover to focus · click to pin<br>use legend to filter flows</div>
 <script>
-const sv=document.getElementById('cv'),g=document.getElementById('dg'),tp=document.getElementById('tp');
+const cw=document.getElementById('cw'),ci=document.getElementById('ci');
 let sc=1,tx=0,ty=0,dr=false,lx=0,ly=0;
-function aT(){g.setAttribute('transform',`translate(${tx},${ty}) scale(${sc})`);}
-sv.addEventListener('wheel',e=>{e.preventDefault();const r=sv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top,d=e.deltaY>0?.88:1.12,ns=Math.max(.1,Math.min(6,sc*d));tx=mx-(mx-tx)*(ns/sc);ty=my-(my-ty)*(ns/sc);sc=ns;aT();},{passive:false});
-sv.addEventListener('mousedown',e=>{if(!e.target.closest('.ng')){dr=true;lx=e.clientX;ly=e.clientY;}});
+function aT(){ci.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;}
+cw.addEventListener('wheel',e=>{e.preventDefault();const r=cw.getBoundingClientRect(),mx=e.clientX-r.left-tx,my=e.clientY-r.top-ty,d=e.deltaY>0?.88:1.12,ns=Math.max(.25,Math.min(3,sc*d));tx-=mx*(ns-sc);ty-=my*(ns-sc);sc=ns;aT();},{passive:false});
+cw.addEventListener('mousedown',e=>{if(!e.target.closest('.node')){dr=true;lx=e.clientX;ly=e.clientY;}});
 window.addEventListener('mousemove',e=>{if(!dr)return;tx+=e.clientX-lx;ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;aT();});
 window.addEventListener('mouseup',()=>dr=false);
-document.getElementById('zi').onclick=()=>{sc=Math.min(6,sc*1.2);aT();};
-document.getElementById('zo').onclick=()=>{sc=Math.max(.1,sc/1.2);aT();};
+document.getElementById('zi').onclick=()=>{sc=Math.min(3,sc*1.2);aT();};
+document.getElementById('zo').onclick=()=>{sc=Math.max(.25,sc/1.2);aT();};
 document.getElementById('zr').onclick=()=>{sc=1;tx=0;ty=0;aT();};
-window.addEventListener('load',()=>{const b=g.getBBox(),sw=sv.clientWidth,sh=sv.clientHeight;sc=Math.min(sw/(b.width+160),sh/(b.height+160),1.5);tx=(sw-b.width*sc)/2-b.x*sc;ty=(sh-b.height*sc)/2-b.y*sc;aT();});
-document.querySelectorAll('.ng[data-tip]').forEach(n=>{n.addEventListener('mouseenter',()=>{tp.textContent=n.dataset.tip;tp.classList.add('on');});n.addEventListener('mousemove',e=>{tp.style.left=(e.clientX+16)+'px';tp.style.top=(e.clientY-8)+'px';});n.addEventListener('mouseleave',()=>tp.classList.remove('on'));});
+
+const allNodes=document.querySelectorAll('.node');
+let pinned=null;
+function focusNode(n){
+  allNodes.forEach(x=>x!==n?x.classList.add('dimmed'):x.classList.remove('dimmed'));
+  n.classList.add('focused');
+  const id=n.dataset.id;
+  document.querySelectorAll('path[data-flow]').forEach(p=>p.classList.toggle('dim',p.dataset.from!==id&&p.dataset.to!==id));
+}
+function clearFocus(){allNodes.forEach(x=>x.classList.remove('dimmed','focused','pinned'));document.querySelectorAll('path[data-flow]').forEach(p=>p.classList.remove('dim'));}
+allNodes.forEach(n=>{
+  n.addEventListener('mouseenter',()=>{if(!pinned)focusNode(n);});
+  n.addEventListener('mouseleave',()=>{if(!pinned)clearFocus();});
+  n.addEventListener('click',e=>{e.stopPropagation();if(pinned===n){pinned=null;clearFocus();}else{pinned=n;clearFocus();n.classList.add('pinned');focusNode(n);}});
+});
+document.body.addEventListener('click',()=>{if(pinned){pinned=null;clearFocus();}});
+document.querySelectorAll('.lrow input').forEach(cb=>{
+  cb.addEventListener('change',()=>{
+    document.querySelectorAll(`path[data-flow="${cb.dataset.flow}"]`).forEach(p=>p.style.display=cb.checked?'':'none');
+  });
+});
 </script></body></html>
